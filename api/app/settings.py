@@ -1,0 +1,28 @@
+import os
+from pydantic_settings import BaseSettings
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class Settings(BaseSettings):
+    PROJECT_NAME: str = "mushare"
+    API_V1_STR: str = "/api/v1"
+
+    REDIS_HOST: str = "localhost"
+    REDIS_PORT: int = 6379
+    REDIS_DB: int = 0
+    LINK_CACHE_TTL_SECONDS: int = 3600 * 24 * 30 # 30 days
+
+    # Spotify Web API deets
+    SPOTIFY_CLIENT_ID: str = os.getenv("SPOTIFY_CLIENT_ID", "")
+    SPOTIFY_CLIENT_SECRET: str = os.getenv("SPOTIFY_CLIENT_SECRET", "")
+
+    # Apple Music API deets
+    APPLE_MUSIC_TEAM_ID: str = os.getenv("APPLE_MUSIC_TEAM_ID", "")
+    APPLE_MUSIC_KEY_ID: str = os.getenv("APPLE_MUSIC_KEY_ID", "")
+    APPLE_MUSIC_PRIVATE_KEY_PATH: str = os.getenv("APPLE_MUSIC_PRIVATE_KEY_PATH", "mushare.p8")
+
+    class Config:
+        case_sensitive = True
+
+settings = Settings() 
