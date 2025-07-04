@@ -109,7 +109,7 @@
           </div>
           <button
             class="copy-btn"
-            on:click={() => handleCopyToClipboard(`${sourcePlatform}: ${result.source_url}\n${convertedPlatform} URL: ${result.converted_url}`, 'combined')}
+            on:click={() => handleCopyToClipboard(`${sourcePlatform}: ${result.source_url}\n${convertedPlatform}: ${result.converted_url}`, 'combined')}
             title="Copy both links"
           >
              {#if copied === 'combined'}
