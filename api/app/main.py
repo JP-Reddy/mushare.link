@@ -35,6 +35,10 @@ class ConvertResponse(BaseModel):
     source_url: HttpUrl
     converted_url: HttpUrl
 
+@app.get("/")
+def roooooot():
+    return {"status": "yo mama so fat she can't convert links"}
+
 @app.post("/api/v1/convert", response_model=ConvertResponse)
 async def convert_link(request: ConvertRequest):
     print(f"request: {request}")
@@ -94,10 +98,6 @@ async def convert_link(request: ConvertRequest):
 
     return ConvertResponse(source_url=source_url, converted_url=converted_url)
 
-@app.get("/")
-def roooooot():
-    return {"status": "yo mama so fat she can't convert links"}
-
-@app.get("/cache/stats")
+@app.get("/api/v1/cache/stats")
 def cache_stats():
     return get_cache_stats() 

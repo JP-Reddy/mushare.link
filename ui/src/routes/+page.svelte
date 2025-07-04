@@ -1,4 +1,6 @@
 <script>
+  import { API_ENDPOINTS } from '$lib/config.js';
+  
   let url = '';
   let loading = false;
   let error = '';
@@ -21,7 +23,7 @@
     result = null;
 
     try {
-      const response = await fetch('/api/v1/convert', {
+      const response = await fetch(API_ENDPOINTS.convert, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ source_url: url }),
