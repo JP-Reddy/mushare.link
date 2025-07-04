@@ -1,21 +1,28 @@
-api/venv/
-
-# Secrets
-*.p8
-*.env
-.env.*
-
 # macOS
 .DS_Store
 
 .vscode/
 
-# Node / React
-node_modules
-dist
-.env
-.env*.local
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.DS_Store
+# --- API ---
+
+api/venv/
+
+# Secrets
+api/*.p8
+api/*.env
+api/.env.*
+
+
+# --- UI ---
+
+ui/node_modules
+ui/.output
+ui/.vercel
+ui/.netlify
+ui/.wrangler
+ui/.svelte-kit
+ui/build
+
+# Vite
+ui/vite.config.js.timestamp-*
+ui/vite.config.ts.timestamp-*

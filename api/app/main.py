@@ -55,20 +55,20 @@ async def convert_link(request: ConvertRequest):
         track_id = extract_spotify_track_id(source_url)
         print(f"track_id: {track_id}")
         if not track_id:
-            raise HTTPException(status_code=400, detail="Invalid Spotify track URL")
+            raise HTTPException(status_code=400, detail="Hmmm, invalid Spotify track URL")
         source_details = await get_track_details_from_spotify(track_id)
         
     elif "apple.com" in source_url or "music.apple.com" in source_url:
         service_type = "apple"
         apple_info = extract_apple_music_info(source_url)
         if not apple_info:
-            raise HTTPException(status_code=400, detail="Could not parse Apple Music URL")
+            raise HTTPException(status_code=400, detail="Hmm, invalid Apple Music URL")
         source_details = await get_track_details_from_apple_music(apple_info["id"], apple_info["storefront"])
     else:
-        raise HTTPException(status_code=400, detail="Invalid music URL provided")
+        raise HTTPException(status_code=400, detail="Uh oh, invalid URL provided :(")
 
     if not source_details:
-         raise HTTPException(status_code=404, detail="Could not retrieve details for the provided link")
+         raise HTTPException(status_code=404, detail="Oops, could not retrieve details for the provided link :(")
 
     # 3. Use details to get the converted link from the target service
     converted_url = None
