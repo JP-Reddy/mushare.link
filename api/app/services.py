@@ -29,7 +29,6 @@ async def get_spotify_token():
     # Refresh token if it's expiring in the next 60 seconds
     buffer = 60  
 
-    print(f"getting spotify token", _spotify_token, _spotify_token_expires_at)
     if _spotify_token and current_time < (_spotify_token_expires_at - buffer):
         return _spotify_token
 
@@ -116,7 +115,6 @@ def get_apple_music_token():
 
     buffer = 60  
 
-    print(f"getting apple music token", _apple_music_token, _apple_music_token_expiry)
     if _apple_music_token and current_time < (_apple_music_token_expiry - buffer):
         return _apple_music_token
 
@@ -126,7 +124,7 @@ def get_apple_music_token():
     key_file_path = settings.APPLE_MUSIC_PRIVATE_KEY_PATH
 
     if not all([team_id, key_id, key_file_path]):
-        raise HTTPException(status_code=500, detail="Apple Music credentials not fully configured.")
+        raise HTTPException(status_code=500, detail="Apple Music credentials not fully configured")
         
     try:
         with open(key_file_path, 'r') as f:
@@ -224,7 +222,6 @@ async def get_isrc_from_apple_music(song_id: str, storefront: str) -> Optional[s
     
     api_url = f"https://api.music.apple.com/v1/catalog/{storefront}/songs/{song_id}"
 
-    print(f"getting isrc from apple music", api_url, headers)
     async with httpx.AsyncClient() as client:
         response = await client.get(api_url, headers=headers)
         

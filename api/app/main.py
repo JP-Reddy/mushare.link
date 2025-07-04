@@ -8,7 +8,6 @@ from app.services import (
     normalize_url,
     extract_spotify_track_id, 
     get_track_details_from_spotify,
-    # get_apple_music_url_from_isrc,
     extract_apple_music_info,
     get_track_details_from_apple_music,
     get_spotify_url,
@@ -17,7 +16,7 @@ from app.services import (
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    description="API for converting music links between Spotify and Apple Music.",
+    description="API for converting music links between Spotify and Apple Music",
     version="1.0.0"
 )
 
