@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, HttpUrl
 
-from app.redis import get_link_from_cache, set_link_in_cache
+from app.cache import get_link_from_cache, set_link_in_cache, get_cache_stats
 from app.settings import settings
 from app.services import (
     normalize_url,
@@ -96,4 +96,8 @@ async def convert_link(request: ConvertRequest):
 
 @app.get("/")
 def roooooot():
-    return {"status": "yo mama so fat she can't convert links"} 
+    return {"status": "yo mama so fat she can't convert links"}
+
+@app.get("/cache/stats")
+def cache_stats():
+    return get_cache_stats() 

@@ -6,11 +6,7 @@ load_dotenv()
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "mushare"
-    API_V1_STR: str = "/api/v1"
 
-    REDIS_HOST: str = "localhost"
-    REDIS_PORT: int = 6379
-    REDIS_DB: int = 0
     LINK_CACHE_TTL_SECONDS: int = 3600 * 24 * 30 # 30 days
 
     # Spotify Web API deets
