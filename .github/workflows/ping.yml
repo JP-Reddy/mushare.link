@@ -11,7 +11,5 @@ jobs:
       - name: Ping API
         run: |
           curl --location 'https://mushare.onrender.com/api/v1/convert' \
---header 'Content-Type: application/json' \
---data '{
-  "source_url": "https://open.spotify.com/track/4PTG3Z6ehGkBFwjybzWkR8?si=54d77e6583c24cea"
-}' || exit 1
+            --header 'Content-Type: application/json' \
+            --data '{"source_url": "https://open.spotify.com/track/4PTG3Z6ehGkBFwjybzWkR8?si=54d77e6583c24cea"}' || exit 1
