@@ -35,6 +35,7 @@ class ConvertResponse(BaseModel):
     source_url: HttpUrl
     converted_url: HttpUrl
 
+@app.head('/')
 @app.get("/")
 def roooooot():
     return {"status": "yo mama so fat she can't convert links"}
