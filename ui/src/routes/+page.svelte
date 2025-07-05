@@ -17,10 +17,25 @@
     }
   }
 
+  function isValidUrl(string) {
+    try {
+      const url = new URL(string);
+      return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch {
+      return false;
+    }
+  }
+  
   async function handleSubmit() {
     loading = true;
     error = '';
     result = null;
+
+    if (!isValidUrl(url)) {
+      error = 'Hmmm, invalid URL provided';
+      loading = false;
+      return;
+    }
 
     try {
       const response = await fetch(API_ENDPOINTS.convert, {
@@ -31,12 +46,18 @@
 
       if (!response.ok) {
         const err = await response.json();
-        throw new Error(err.detail || 'An unknown error occurred.');
+        throw new Error(err.detail || 'An unknown error occurred');
       }
 
       result = await response.json();
     } catch (err) {
-      error = err.message;
+      if (err instanceof SyntaxError && err.message.includes('JSON')) {
+        error = 'Network error - please check your connection and try again';
+      } else if (err.message) {
+        error = err.message;
+      } else {
+        error = 'An unexpected error occurred';
+      }
     } finally {
       loading = false;
     }
