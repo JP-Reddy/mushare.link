@@ -16,8 +16,10 @@ This repo contains both the backend API and the UI.
 
 -   `/api`: A **FastAPI** application that handles all the link conversion logic, communication with external music services, and caching.
 -   `/ui`: A **Svelte** single-page app.
--   `/.github/workflows`: Render API goes to sleep if the app is inactive for 15min. Created a **GitHub Actions** workflow that queries the API every few min which helps avoid the API from sleeping. 
+-   ~~`/.github/workflows`: Render API goes to sleep if the app is inactive for 15min. Created a **GitHub Actions** workflow that queries the API every few min which helps avoid the API from sleeping. ~~
+  Github Actions is [unreliable](https://upptime.js.org/blog/2021/01/22/github-actions-schedule-not-working/). Created a simple monitor on UptimeRobot as an alternative.
 
 ## Deployment
 -   API on **Render**
 -   UI on **Netlify**
+-   API KeepAlive via UptimeRobot
