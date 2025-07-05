@@ -143,14 +143,26 @@
       </div>
     {/if}
   </main>
+
+  <footer>
+    <div class="footer-content">
+        <p class="main-line">
+            Made with ❤️ in Madison
+        </p>
+        <p class="contact">
+            Issues? Contact: <a href="mailto:guthijp.reddy@gmail.com">guthijp.reddy@gmail.com</a>
+        </p>
+        <p class="font-credit">
+            Font by <a href="http://bythebutterfly.com" target="_blank" rel="noopener noreferrer">Vanessa Bays</a>
+        </p>
+    </div>
+  </footer>
 </div>
 
 <style>
   @font-face {
     font-family: 'PleaseWriteMeASong';
     src: url('/fonts/PleaseWriteMeASong.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
     font-display: swap;
   }
 
@@ -162,23 +174,29 @@
     font-display: swap;
 
   }
-  :global(body) {
+  :global(html, body) {
     background-color: #fdfcfb;
     color: #2d3748; /* Dark Gray for text */
     font-family: 'GT-Walsheim', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
+    padding: 0;
+    min-height: 100svh;
+    overflow-x: hidden;
+    box-sizing: border-box;
   }
 
   .container {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     max-width: 600px;
+    margin: 0 auto;
     padding: 1rem;
-    padding-top: 8vh; /* Added top padding */
+    box-sizing: border-box;
     text-align: center;
   }
 
@@ -186,9 +204,7 @@
     font-family: "PleaseWriteMeASong";
     font-size: 3rem;
     font-weight: 700;
-    background: #FC2D55;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #FC2D55;
     margin-bottom: 0.5rem;
   }
 
@@ -206,7 +222,9 @@
     border-radius: 1rem;
     padding: 1.5rem;
     border: 1px solid #e2e8f0;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    box-sizing: border-box;
   }
 
   input {
@@ -218,7 +236,7 @@
     border-radius: 0.5rem;
     color: #4a5568;
     font-size: 1rem;
-    transition: all 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s;
     box-sizing: border-box;
     font-family: inherit;
   }
@@ -308,11 +326,12 @@
   .link:hover {
     text-decoration: underline;
   }
+  
 
   .link-description {
-     display: block;
-     font-size: 0.875rem;
-     color: #718096; 
+    display: block;
+    font-size: 0.875rem;
+    color: #718096; 
   }
   
   .copy-btn {
@@ -328,28 +347,88 @@
     transition: background-color 0.2s;
     color: #4a5568;
   }
+
   .copy-btn:hover {
     background-color: #cbd5e0;
-    transform: none;
-    box-shadow: none;
+  }
+
+  .copy-btn:hover .icon {
+    transform: scale(1.1);
   }
 
   .icon {
     width: 1.5rem;
     height: 1.5rem;
   }
-  
-  .copy-btn:hover .icon {
-      transform: scale(1.1);
-  }
 
-  .copy-btn .icon:nth-child(1) { /* Check icon */
+  .copy-btn .icon:nth-child(1) {
     color: #FC2D55; 
   }
 
   .url-link {
-     display: block;
-     font-size: 0.875rem;
-     color: #718096;
+    display: block;
+    font-size: 0.875rem;
+    color: #718096;
+  }
+
+  footer {
+    margin-top: auto;
+    padding: 2rem 0;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+    width: 100%;
+  }
+
+  .footer-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .footer-content p {
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
+    color: #718096;
+    line-height: 1.5;
+  }
+
+  .footer-content a {
+    color: #FC2D55;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .footer-content a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  .main-line {
+    color: #6B46C1;
+    margin-bottom: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 0.75rem;
+      min-height: 100dvh;
+    }
+    
+    header h1 {
+      font-size: 2.5rem;
+    }
+    
+    header p {
+      font-size: 1.25rem;
+      margin: 0.5rem;
+    }
+    
+    main {
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    
+    footer {
+      padding: 1.5rem 0;
+    }
   }
 </style>
