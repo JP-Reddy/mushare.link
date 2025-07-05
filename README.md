@@ -2,7 +2,7 @@
 
 An app to convert and share music links between Spotify and Apple Music.
 
-App: [mushare.link](https://mushare.link) 
+Check it out: [mushare.link](https://mushare.link) 
 
 ## How It Works
 
@@ -15,9 +15,9 @@ App: [mushare.link](https://mushare.link)
 This repo contains both the backend API and the UI.
 
 -   `/api`: A **FastAPI** application that handles all the link conversion logic, communication with external music services, and caching.
--   `/ui`: A **SvelteKit** single-page application.
+-   `/ui`: A **Svelte** single-page app.
 -   `/.github/workflows`: Render API goes to sleep if the app is inactive for 15min. Created a **GitHub Actions** workflow to stop it from sleeping. 
 
 ## Deployment
-    -   API on **Render**
-    -   UI on **Netlify**
+-   API on **Render**
+-   UI on **Netlify**
