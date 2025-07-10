@@ -18,6 +18,10 @@ class Settings(BaseSettings):
     APPLE_MUSIC_KEY_ID: str = os.getenv("APPLE_MUSIC_KEY_ID", "")
     APPLE_MUSIC_PRIVATE_KEY_PATH: str = os.getenv("APPLE_MUSIC_PRIVATE_KEY_PATH", "mushare.p8")
 
+    # PostHog deets
+    POSTHOG_API_KEY: str = os.getenv("POSTHOG_API_KEY", "")
+    POSTHOG_HOST: str = os.getenv("POSTHOG_HOST", "https://us.i.posthog.com")
+
     class Config:
         case_sensitive = True
 
