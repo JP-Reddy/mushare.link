@@ -62,12 +62,13 @@ async def convert_link(request: ConvertRequest, background_tasks: BackgroundTask
 
         # 1. Normalize URL and check cache
         normalized_source_url = normalize_url(source_url)
-        cache_storefront = request.storefront if source_platform == "spotify" else "us"
-        cached_url = get_link_from_cache(normalized_source_url, cache_storefront)
+        storefront = request.storefront if source_platform == "spotify" else "us"
+        cached_url = get_link_from_cache(normalized_source_url, storefront)
         if cached_url:
             if should_track:
                 properties = {
                     "source_platform": source_platform,
+                    "storefront": storefront,
                     "was_cached": True,
                 }
                 background_tasks.add_task(track_conversion, status='success', properties=properties)
@@ -115,11 +116,12 @@ async def convert_link(request: ConvertRequest, background_tasks: BackgroundTask
             raise HTTPException(status_code=404, detail="Could not find a match")
 
         # 4. Cache and return the result
-        set_link_in_cache(normalized_source_url, converted_url, cache_storefront)
+        set_link_in_cache(normalized_source_url, converted_url, storefront)
 
         if should_track:
             properties = {
                 "source_platform": source_platform,
+                "storefront": storefront,
                 "was_cached": False,
             }
             background_tasks.add_task(track_conversion, status='success', properties=properties)
@@ -130,6 +132,7 @@ async def convert_link(request: ConvertRequest, background_tasks: BackgroundTask
         if should_track:
             properties = {
                 "source_platform": source_platform,
+                "storefront": storefront,
                 "source_url": source_url,
                 "error_detail": e.detail,
                 "status_code": e.status_code,
@@ -140,6 +143,7 @@ async def convert_link(request: ConvertRequest, background_tasks: BackgroundTask
         if should_track:
             properties = {
                 "source_platform": source_platform,
+                "storefront": storefront,
                 "source_url": source_url,
                 "error_detail": str(e),
                 "status_code": 500,
