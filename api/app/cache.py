@@ -7,8 +7,8 @@ _cache: Dict[str, Tuple[str, float]] = {}
 def _is_expired(expiry_timestamp: float) -> bool:
     return time.time() > expiry_timestamp
 
-def get_link_from_cache(url: str) -> Optional[str]:
-    cache_key = f"link:{url}"
+def get_link_from_cache(url: str, storefront: str = "us") -> Optional[str]:
+    cache_key = f"link:{url}:storefront:{storefront}"
     if cache_key in _cache:
         value, expiry_timestamp = _cache[cache_key]
         if not _is_expired(expiry_timestamp):
@@ -19,8 +19,8 @@ def get_link_from_cache(url: str) -> Optional[str]:
     
     return None
 
-def set_link_in_cache(source_url: str, converted_url: str):
-    cache_key = f"link:{source_url}"
+def set_link_in_cache(source_url: str, converted_url: str, storefront: str = "us"):
+    cache_key = f"link:{source_url}:storefront:{storefront}"
     expiry_timestamp = time.time() + settings.LINK_CACHE_TTL_SECONDS
     _cache[cache_key] = (converted_url, expiry_timestamp)
 

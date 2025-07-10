@@ -34,6 +34,7 @@ app.add_middleware(
 
 class ConvertRequest(BaseModel):
     source_url: HttpUrl
+    storefront: str = "us"
 
 class ConvertResponse(BaseModel):
     source_url: HttpUrl
@@ -61,7 +62,8 @@ async def convert_link(request: ConvertRequest, background_tasks: BackgroundTask
 
         # 1. Normalize URL and check cache
         normalized_source_url = normalize_url(source_url)
-        cached_url = get_link_from_cache(normalized_source_url)
+        cache_storefront = request.storefront if source_platform == "spotify" else "us"
+        cached_url = get_link_from_cache(normalized_source_url, cache_storefront)
         if cached_url:
             if should_track:
                 properties = {
@@ -99,7 +101,8 @@ async def convert_link(request: ConvertRequest, background_tasks: BackgroundTask
             converted_url = await get_apple_music_url(
                 isrc=source_details.get("isrc"),
                 track_name=source_details["name"],
-                artist_name=source_details["artist"]
+                artist_name=source_details["artist"],
+                storefront=request.storefront
             )
         elif service_type == "apple-music":
             converted_url = await get_spotify_url(
@@ -112,7 +115,7 @@ async def convert_link(request: ConvertRequest, background_tasks: BackgroundTask
             raise HTTPException(status_code=404, detail="Could not find a match")
 
         # 4. Cache and return the result
-        set_link_in_cache(normalized_source_url, converted_url)
+        set_link_in_cache(normalized_source_url, converted_url, cache_storefront)
 
         if should_track:
             properties = {

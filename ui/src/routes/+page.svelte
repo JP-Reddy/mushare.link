@@ -1,11 +1,14 @@
 <script>
   import { API_ENDPOINTS } from '$lib/config.js';
+  import { storefronts, getFlagUrl } from '$lib/storefronts.js';
   
   let url = '';
   let loading = false;
   let error = '';
   let result = null;
   let copied = null;
+  let selectedStorefront = 'us';
+  let showCountryDropdown = false;
 
   async function handleCopyToClipboard(text, type) {
     try {
@@ -41,7 +44,10 @@
       const response = await fetch(API_ENDPOINTS.convert, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ source_url: url }),
+        body: JSON.stringify({ 
+          source_url: url,
+          storefront: selectedStorefront
+        }),
       });
 
       if (!response.ok) {
@@ -67,6 +73,21 @@
     return link.includes('spotify.com') ? 'Spotify' : 'Apple Music';
   }
 
+  function selectCountry(countryId) {
+    selectedStorefront = countryId;
+    showCountryDropdown = false;
+  }
+
+  function toggleCountryDropdown() {
+    showCountryDropdown = !showCountryDropdown;
+  }
+
+  function handleClickOutside(event) {
+    if (!event.target.closest('.country-selector')) {
+      showCountryDropdown = false;
+    }
+  }
+
   $: sourcePlatform = result ? getPlatform(result.source_url) : '';
   $: convertedPlatform = result ? (sourcePlatform === 'Spotify' ? 'Apple Music' : 'Spotify') : '';
 </script>
@@ -74,6 +95,8 @@
 <svelte:head>
   <title>MuShare</title>
 </svelte:head>
+
+<svelte:window on:click={handleClickOutside} />
 
 <div class="container">
   <header>
@@ -83,12 +106,53 @@
 
   <main>
     <form on:submit|preventDefault={handleSubmit}>
-      <input
-        type="url"
-        bind:value={url}
-        placeholder="Paste Spotify or Apple Music link..."
-        required
-      />
+      <div class="input-row">
+        <input
+          type="url"
+          bind:value={url}
+          placeholder="Paste Spotify or Apple Music link..."
+          required
+          class="url-input"
+        />
+        
+        <div class="country-selector">
+          <button 
+            type="button"
+            class="country-button"
+            on:click={toggleCountryDropdown}
+          >
+            <img src={getFlagUrl(selectedStorefront)} alt="" class="flag-image" />
+            <svg class="dropdown-arrow" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          
+          {#if showCountryDropdown}
+            <div class="country-dropdown">
+              {#each storefronts as country}
+                <button
+                  type="button"
+                  class="country-option"
+                  class:selected={country.id === selectedStorefront}
+                  on:click={() => selectCountry(country.id)}
+                >
+                  <img src={getFlagUrl(country.id)} alt="" class="flag-image" />
+                  <span class="country-name">{country.name}</span>
+                  <span class="country-code-small">{country.id.toUpperCase()}</span>
+                </button>
+              {/each}
+            </div>
+          {/if}
+        </div>
+        
+        <div class="help-tooltip">
+          <div class="info-icon">?</div>
+          <div class="tooltip-content">
+            Apple Music links are region specific and may not work across different countries. Selecting your region ensures the link works properly for you.
+          </div>
+        </div>
+      </div>
+
       <button type="submit" disabled={loading}>
         {loading ? 'Converting...' : 'Convert'}
       </button>
@@ -172,11 +236,11 @@
     font-weight: normal;
     font-style: normal;
     font-display: swap;
-
   }
+
   :global(html, body) {
     background-color: #fdfcfb;
-    color: #2d3748; /* Dark Gray for text */
+    color: #2d3748;
     font-family: 'GT-Walsheim', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     margin: 0;
@@ -227,10 +291,17 @@
     box-sizing: border-box;
   }
 
-  input {
-    width: 100%;
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .url-input {
+    flex: 1;
     padding: 1rem;
-    text-align: center;
+    text-align: left;
     background-color: #f7fafc;
     border: 2px solid #e2e8f0;
     border-radius: 0.5rem;
@@ -239,19 +310,179 @@
     transition: border-color 0.3s, box-shadow 0.3s;
     box-sizing: border-box;
     font-family: inherit;
+    height: 3.5rem;
   }
 
-  input::placeholder {
+  .url-input::placeholder {
     color: #a0aec0;
   }
 
-  input:focus {
+  .url-input:focus {
     outline: none;
     border-color: #FC2D55;
     box-shadow: 0 0 0 3px rgba(252, 45, 85, 0.3);
   }
 
-  button {
+  .country-selector {
+    position: relative;
+    z-index: 10;
+  }
+
+  .country-button {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0 0.5rem;
+    background-color: #f7fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-sizing: border-box;
+    font-family: inherit;
+    white-space: nowrap;
+    height: 3.5rem;
+  }
+
+  .country-button:hover {
+    background-color: #edf2f7;
+    border-color: #cbd5e0;
+  }
+
+  .country-button:focus {
+    outline: none;
+    border-color: #FC2D55;
+    box-shadow: 0 0 0 3px rgba(252, 45, 85, 0.3);
+  }
+
+  .flag-image {
+    width: 20px;
+    height: 15px;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+
+
+  .dropdown-arrow {
+    width: 1rem;
+    height: 1rem;
+    color: #718096;
+  }
+
+  .country-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    min-width: 250px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 20;
+    margin-top: 0.25rem;
+  }
+
+  .country-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    background: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-family: inherit;
+    text-align: left;
+  }
+
+  .country-option:hover {
+    background-color: #f7fafc;
+  }
+
+  .country-option.selected {
+    background-color: #ebf8ff;
+    color: #3182ce;
+  }
+
+  .country-name {
+    flex: 1;
+    font-size: 0.875rem;
+    color: #4a5568;
+  }
+
+  .country-code-small {
+    font-size: 0.75rem;
+    color: #718096;
+    font-weight: 600;
+  }
+
+  .help-tooltip {
+    position: relative;
+  }
+
+  .info-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background-color: #e2e8f0;
+    border-radius: 50%;
+    color: #718096;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+
+  .info-icon:hover {
+    background-color: #cbd5e0;
+    color: #4a5568;
+    transform: scale(1.1);
+  }
+
+  .tooltip-content {
+    position: absolute;
+    bottom: 150%;
+    right: -140px;
+    width: 280px;
+    background-color: #2d3748;
+    color: white;
+    text-align: left;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 30;
+  }
+
+  .tooltip-content::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: 150px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #2d3748;
+  }
+
+  .help-tooltip:hover .tooltip-content {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  button[type="submit"] {
     width: 100%;
     margin-top: 1rem;
     padding: 0.75rem 1rem;
@@ -266,13 +497,13 @@
     font-family: inherit;
   }
 
-  button:hover:not(:disabled) {
+  button[type="submit"]:hover:not(:disabled) {
     opacity: 0.9;
     transform: scale(1.05);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   }
   
-  button:disabled {
+  button[type="submit"]:disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
@@ -342,14 +573,21 @@
     align-items: center;
     justify-content: center;
     background-color: #e2e8f0;
+    border: none;
     border-radius: 0.5rem;
     margin: 0;
-    transition: background-color 0.2s;
+    padding: 0;
+    transition: all 0.3s;
     color: #4a5568;
+    cursor: pointer;
+    font-family: inherit;
   }
 
   .copy-btn:hover {
     background-color: #cbd5e0;
+    transform: none;
+    opacity: 1;
+    box-shadow: none;
   }
 
   .copy-btn:hover .icon {
@@ -357,8 +595,8 @@
   }
 
   .icon {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.1rem;
+    height: 1.1rem;
   }
 
   .copy-btn .icon:nth-child(1) {
@@ -425,6 +663,35 @@
     main {
       padding: 1rem;
       margin-top: 1rem;
+    }
+    
+    .input-row {
+      gap: 0.5rem;
+    }
+
+    .url-input {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .country-button {
+      padding: 0 0.375rem;
+      min-width: fit-content;
+    }
+
+    .info-icon {
+      width: 1.75rem;
+      height: 1.75rem;
+      font-size: 0.875rem;
+    }
+
+    .tooltip-content {
+      right: -280px;
+      width: 200px;
+    }
+
+    .tooltip-content::after {
+      right: 190px;
     }
     
     footer {
