@@ -686,12 +686,13 @@
     }
 
     .tooltip-content {
-      right: -280px;
+      right: auto;
+      left: -150px;
       width: 200px;
     }
 
     .tooltip-content::after {
-      right: 190px;
+      left: 160px;
     }
     
     footer {
