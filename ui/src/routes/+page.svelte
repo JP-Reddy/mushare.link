@@ -146,7 +146,7 @@
         </div>
         
         <div class="help-tooltip">
-          <div class="info-icon">?</div>
+          <div class="info-icon">ⓘ</div>
           <div class="tooltip-content">
             Apple Music links are region specific and may not work across different countries. Selecting your region ensures the link works properly for you.
           </div>
@@ -306,7 +306,7 @@
     border: 2px solid #e2e8f0;
     border-radius: 0.5rem;
     color: #4a5568;
-    font-size: 1rem;
+    font-size: 0.9rem;
     transition: border-color 0.3s, box-shadow 0.3s;
     box-sizing: border-box;
     font-family: inherit;
@@ -429,20 +429,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    background-color: #e2e8f0;
-    border-radius: 50%;
+    width: 1rem;
+    height: 1rem;
     color: #718096;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 1.25rem;
     cursor: pointer;
     transition: all 0.3s;
     font-family: inherit;
   }
 
   .info-icon:hover {
-    background-color: #cbd5e0;
     color: #4a5568;
     transform: scale(1.1);
   }
@@ -469,7 +466,7 @@
     content: '';
     position: absolute;
     top: 100%;
-    right: 150px;
+    right: 140px;
     width: 0;
     height: 0;
     border-left: 8px solid transparent;
@@ -679,20 +676,14 @@
       min-width: fit-content;
     }
 
-    .info-icon {
-      width: 1.75rem;
-      height: 1.75rem;
-      font-size: 0.875rem;
-    }
-
     .tooltip-content {
       right: auto;
-      left: -150px;
-      width: 200px;
+      left: -180px;
+      width: 190px;
     }
 
     .tooltip-content::after {
-      left: 160px;
+      left: 180px;
     }
     
     footer {
