@@ -154,11 +154,17 @@ def get_apple_music_token():
 def extract_apple_music_info(url: str) -> Optional[dict]:
     """Extract storefront and song ID from Apple Music URL."""
 
+    # album format music.apple.com/us/album/album-name/album-id?i=song-id
     match = re.search(r"music\.apple\.com/(\w+)/album/.+\?i=(\d+)", url)
-    if not match:
-        return None
+    if match:
+        return {"storefront": match.group(1), "id": match.group(2)}
+    
+    # song format music.apple.com/us/song/song-name/song-id
+    match = re.search(r"music\.apple\.com/(\w+)/song/.+/(\d+)", url)
+    if match:
+        return {"storefront": match.group(1), "id": match.group(2)}
         
-    return {"storefront": match.group(1), "id": match.group(2)}
+    return None
 
 async def get_apple_music_url(isrc: Optional[str], track_name: str, artist_name: str, storefront: str = "us") -> Optional[str]:
     token = get_apple_music_token()
